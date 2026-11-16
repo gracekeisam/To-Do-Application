@@ -47,3 +47,4 @@ public:
 };
 
 #endif // TASK_MANAGER_H
+

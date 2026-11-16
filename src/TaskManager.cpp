@@ -372,3 +372,4 @@ int TaskManager::getStreak(const std::string& today) const {
 
     return streak;
 }
+

@@ -117,3 +117,4 @@ std::string sanitizeDescription(const std::string& desc) {
 }
 
 } // namespace DateUtils
+

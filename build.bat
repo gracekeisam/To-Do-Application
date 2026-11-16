@@ -15,12 +15,14 @@ call em++ -O2 -std=c++17 --bind ^
     -lidbfs.js ^
     -s MODULARIZE=1 ^
     -s EXPORT_NAME="createTaskModule" ^
+    -s EXPORTED_RUNTIME_METHODS=[FS,IDBFS] ^
     src/DateUtils.cpp src/TaskManager.cpp src/bindings.cpp ^
     -o public/task_engine.js
 
 if %ERRORLEVEL% EQU 0 (
     echo.
     echo [SUCCESS] WebAssembly module built successfully in public/
+    copy /Y public\task_engine.* . >nul
     dir public\task_engine.*
 ) else (
     echo.

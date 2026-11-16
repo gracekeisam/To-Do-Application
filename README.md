@@ -161,3 +161,4 @@ Then visit `http://localhost:8000` in your web browser.
    ```
 2. Import the repository in [Vercel](https://vercel.com).
 3. Vercel will automatically detect the static configuration from `vercel.json` and deploy it instantly.
+

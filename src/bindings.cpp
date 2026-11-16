@@ -30,3 +30,4 @@ EMSCRIPTEN_BINDINGS(task_manager_module) {
     function("previousDay", &DateUtils::previousDay);
 }
 #endif
+

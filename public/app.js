@@ -82,23 +82,21 @@ async function initApp() {
 
         // Setup Emscripten Virtual File System & mount IDBFS
         const dataDir = '/data';
-        try {
-            taskModule.FS.mkdir(dataDir);
-        } catch (e) {
-            // Already exists
+        if (taskModule.FS) {
+            try {
+                taskModule.FS.mkdir(dataDir);
+            } catch (e) {
+                // Directory might already exist
+            }
         }
 
-        taskModule.FS.mount(taskModule.IDBFS, {}, dataDir);
+        const idbfsDriver = taskModule.IDBFS || (taskModule.FS && taskModule.FS.filesystems && taskModule.FS.filesystems.IDBFS);
 
-        // Step 1: Sync from IndexedDB into virtual memory before constructing TaskManager
-        taskModule.FS.syncfs(true, function (err) {
-            if (err) {
-                console.error('[Persistence] Error syncing from IndexedDB on startup:', err);
-            }
-
+        const startEngine = () => {
             console.log('[WASM] Constructing C++ TaskManager with /data/tasks.txt...');
             // Step 2: Construct TaskManager which calls load()
-            taskManager = new taskModule.TaskManager('/data/tasks.txt');
+            const storagePath = taskModule.FS ? '/data/tasks.txt' : 'tasks.txt';
+            taskManager = new taskModule.TaskManager(storagePath);
 
             // Hook up window unload for RAII C++ destructor cleanup
             window.addEventListener('beforeunload', () => {
@@ -116,7 +114,25 @@ async function initApp() {
             // Step 3: Initial Display
             refreshUI();
             setupEventListeners();
-        });
+        };
+
+        if (idbfsDriver && taskModule.FS) {
+            try {
+                taskModule.FS.mount(idbfsDriver, {}, dataDir);
+                // Step 1: Sync from IndexedDB into virtual memory before constructing TaskManager
+                taskModule.FS.syncfs(true, function (err) {
+                    if (err) {
+                        console.warn('[Persistence] Initial sync warning:', err);
+                    }
+                    startEngine();
+                });
+            } catch (mountErr) {
+                console.warn('[Persistence] IDBFS mount fallback to MEMFS:', mountErr);
+                startEngine();
+            }
+        } else {
+            startEngine();
+        }
 
     } catch (err) {
         console.error('[WASM] Fatal error initializing engine:', err);
@@ -585,3 +601,4 @@ function escapeHtml(text) {
 
 // Start application when DOM is ready
 window.addEventListener('DOMContentLoaded', initApp);
+
