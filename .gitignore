@@ -1,0 +1,8 @@
+# Ignore OS and temporary artifacts
+*.tmp
+*.o
+*.obj
+*.exe
+test_*.txt
+.DS_Store
+Thumbs.db

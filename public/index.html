@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ WebAssembly To-Do & Habit Analytics</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading C++ WebAssembly Engine & Syncing Storage...</p>
+    </div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="logo-badge">C++ WASM</div>
+                <div>
+                    <h1>Productivity & Task Engine</h1>
+                    <p class="subtitle">Compiled from native C++ with Emscripten Embind & IDBFS Persistence</p>
+                </div>
+            </div>
+            
+            <div class="stats-overview">
+                <!-- Streak Card -->
+                <div class="stat-card streak-card" id="streakCard">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-details">
+                        <span class="stat-value" id="streakDisplay">0</span>
+                        <span class="stat-label">Day Streak</span>
+                    </div>
+                </div>
+
+                <!-- Daily Rate Card -->
+                <div class="stat-card rate-card" id="dailyRateCard">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-details">
+                        <span class="stat-value" id="dailyRateDisplay">No tasks</span>
+                        <span class="stat-label" id="rateDateLabel">Daily Completion</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Notification Banner -->
+        <div id="notificationBanner" class="notification-banner hidden"></div>
+
+        <!-- Main Layout -->
+        <main class="main-content">
+            <!-- Left Column: Task Creator & List -->
+            <section class="task-section">
+                <!-- Add Task Form -->
+                <div class="card form-card">
+                    <div class="card-header">
+                        <h2>Add New Task</h2>
+                        <span class="badge cpp-badge">std::vector&lt;Task&gt;</span>
+                    </div>
+                    
+                    <form id="addTaskForm" class="task-form">
+                        <div class="form-group">
+                            <label for="taskDesc">Task Description <span class="required">*</span></label>
+                            <input type="text" id="taskDesc" placeholder="e.g. Implement leap-year validation algorithms" required autocomplete="off">
+                            <small class="helper-text">Pipes (|) sanitized to /, line breaks converted to spaces.</small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taskPriority">Priority</label>
+                                <select id="taskPriority">
+                                    <option value="0">Low Priority</option>
+                                    <option value="1" selected>Medium Priority</option>
+                                    <option value="2">High Priority</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="taskDueDate">Due Date (Optional)</label>
+                                <input type="date" id="taskDueDate">
+                                <small class="helper-text">YYYY-MM-DD (Leap-year aware)</small>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="btnAddTask">
+                            <span class="btn-icon">➕</span> Add Task
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Tasks List -->
+                <div class="card list-card">
+                    <div class="card-header task-list-header">
+                        <div class="title-with-count">
+                            <h2>Tasks</h2>
+                            <span class="count-pill" id="totalTasksCount">0</span>
+                        </div>
+                        
+                        <!-- Filter Tabs -->
+                        <div class="filter-tabs">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="pending">Pending</button>
+                            <button class="filter-btn" data-filter="completed">Completed</button>
+                        </div>
+                    </div>
+
+                    <div id="taskList" class="task-list">
+                        <!-- Rendered by JavaScript via getTasksJson() -->
+                    </div>
+
+                    <div id="emptyListState" class="empty-state hidden">
+                        <div class="empty-icon">📝</div>
+                        <p class="empty-title">No tasks found</p>
+                        <p class="empty-desc">Create your first task above to track your productivity habits.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Interactive Calendar & Day Analytics -->
+            <aside class="calendar-section">
+                <!-- Interactive Calendar Card -->
+                <div class="card calendar-card">
+                    <div class="calendar-header">
+                        <button class="btn btn-icon-round" id="prevMonthBtn" title="Previous Month">‹</button>
+                        <h3 id="currentMonthYear">November 2026</h3>
+                        <button class="btn btn-icon-round" id="nextMonthBtn" title="Next Month">›</button>
+                    </div>
+
+                    <div class="calendar-actions">
+                        <button class="btn btn-sm btn-outline" id="todayMonthBtn">Go to Today</button>
+                    </div>
+
+                    <!-- Weekday Headers -->
+                    <div class="weekdays-grid">
+                        <span>Sun</span>
+                        <span>Mon</span>
+                        <span>Tue</span>
+                        <span>Wed</span>
+                        <span>Thu</span>
+                        <span>Fri</span>
+                        <span>Sat</span>
+                    </div>
+
+                    <!-- Calendar Days Grid (Calculated by C++ getCalendar) -->
+                    <div id="calendarDaysGrid" class="days-grid"></div>
+
+                    <!-- Calendar Legend -->
+                    <div class="calendar-legend">
+                        <span class="legend-item"><span class="dot dot-due"></span> Due</span>
+                        <span class="legend-item"><span class="dot dot-completed"></span> Completed</span>
+                        <span class="legend-item"><span class="dot dot-both"></span> Due & Done</span>
+                    </div>
+                </div>
+
+                <!-- Selected Date Analytics Details -->
+                <div class="card day-analytics-card">
+                    <div class="card-header">
+                        <h3>Selected Day Analytics</h3>
+                        <span class="date-badge" id="selectedDateBadge">2026-11-16</span>
+                    </div>
+
+                    <div class="day-stats-grid">
+                        <div class="day-stat-box">
+                            <span class="stat-number" id="dayDueCount">0</span>
+                            <span class="stat-sublabel">Due</span>
+                        </div>
+                        <div class="day-stat-box">
+                            <span class="stat-number" id="dayCompletedCount">0</span>
+                            <span class="stat-sublabel">Completed</span>
+                        </div>
+                        <div class="day-stat-box">
+                            <span class="stat-number" id="dayDistinctCount">0</span>
+                            <span class="stat-sublabel">Distinct Tasks</span>
+                        </div>
+                    </div>
+
+                    <div class="completion-bar-container">
+                        <div class="completion-bar-header">
+                            <span>Completion Rate</span>
+                            <span id="dayRateText" class="rate-percentage">No tasks</span>
+                        </div>
+                        <div class="progress-track">
+                            <div id="dayProgressBar" class="progress-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="day-tasks-container">
+                        <h4 class="subhead">Tasks for this day</h4>
+                        <ul id="dayTasksList" class="day-tasks-list">
+                            <!-- Tasks on this day rendered here -->
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Edit Task Modal -->
+        <div id="editTaskModal" class="modal-backdrop hidden">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3>Edit Task</h3>
+                    <button class="btn-close" id="btnCancelEdit">×</button>
+                </div>
+                <form id="editTaskForm">
+                    <input type="hidden" id="editTaskId">
+                    <div class="form-group">
+                        <label for="editTaskDesc">Description</label>
+                        <input type="text" id="editTaskDesc" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editTaskPriority">Priority</label>
+                            <select id="editTaskPriority">
+                                <option value="0">Low Priority</option>
+                                <option value="1">Medium Priority</option>
+                                <option value="2">High Priority</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editTaskDueDate">Due Date</label>
+                            <input type="date" id="editTaskDueDate">
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-outline" id="btnCancelEdit2">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Built with Standard C++ (Task, TaskManager, Priority, isValidDate) compiled to WebAssembly (Emscripten / Embind) & IndexedDB (IDBFS).</p>
+        </footer>
+    </div>
+
+    <!-- WebAssembly Module Loader & Glue -->
+    <script src="task_engine.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
