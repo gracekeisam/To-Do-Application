@@ -15,6 +15,19 @@ private:
     // Helper for JSON escaping
     static std::string escapeJson(const std::string& input);
 
+    // Daily goal visual metadata computed entirely in C++
+    struct DayGoalIndicator {
+        bool hasTasks;
+        double rate;
+        std::string rateLabel;
+        std::string tier;
+        std::string bgColor;
+        std::string borderColor;
+        std::string textColor;
+    };
+
+    static DayGoalIndicator computeDayGoalIndicator(int completed, int distinct);
+
 public:
     explicit TaskManager(const std::string& filename = "tasks.txt");
 

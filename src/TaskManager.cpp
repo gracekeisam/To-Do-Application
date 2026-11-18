@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <unordered_set>
 #include <iomanip>
+#include <cmath>
 
 TaskManager::TaskManager(const std::string& filename)
     : tasks_()
@@ -258,6 +259,68 @@ std::string TaskManager::getTasksJson() const {
     return oss.str();
 }
 
+TaskManager::DayGoalIndicator TaskManager::computeDayGoalIndicator(int completed, int distinct) {
+    DayGoalIndicator info;
+    if (distinct <= 0) {
+        info.hasTasks = false;
+        info.rate = 0.0;
+        info.rateLabel = "";
+        info.tier = "none";
+        info.bgColor = "";
+        info.borderColor = "";
+        info.textColor = "";
+        return info;
+    }
+
+    info.hasTasks = true;
+    double rawRate = (static_cast<double>(completed) / static_cast<double>(distinct)) * 100.0;
+    if (rawRate < 0.0) rawRate = 0.0;
+    if (rawRate > 100.0) rawRate = 100.0;
+
+    info.rate = std::round(rawRate * 10.0) / 10.0;
+    int roundedPct = static_cast<int>(std::round(rawRate));
+    info.rateLabel = std::to_string(roundedPct) + "%";
+
+    if (completed >= distinct) {
+        // 100% daily goal met -> vibrant solid emerald green bubble
+        info.tier = "full";
+        info.bgColor = "hsl(145, 65%, 42%)";
+        info.borderColor = "hsl(145, 72%, 32%)";
+        info.textColor = "#ffffff";
+    } else {
+        if (rawRate == 0.0) {
+            info.tier = "missed";
+        } else if (rawRate < 40.0) {
+            info.tier = "low";
+        } else if (rawRate < 75.0) {
+            info.tier = "medium";
+        } else {
+            info.tier = "high";
+        }
+
+        // Piecewise smooth HSL gradient computed in C++:
+        // 0% -> 50%: Hue 0 (red) -> 42 (warm amber)
+        // 50% -> 99%: Hue 42 (warm amber) -> 132 (fresh green)
+        int hue = 0;
+        if (rawRate <= 50.0) {
+            hue = static_cast<int>(std::round((rawRate / 50.0) * 42.0));
+        } else {
+            hue = static_cast<int>(std::round(42.0 + ((rawRate - 50.0) / 50.0) * 90.0));
+        }
+
+        std::ostringstream bg, border, text;
+        bg << "hsl(" << hue << ", 85%, 90%)";
+        border << "hsl(" << hue << ", 75%, 52%)";
+        text << "hsl(" << hue << ", 72%, 24%)";
+
+        info.bgColor = bg.str();
+        info.borderColor = border.str();
+        info.textColor = text.str();
+    }
+
+    return info;
+}
+
 std::string TaskManager::getCalendar(int year, int month) const {
     if (year < 1 || month < 1 || month > 12) {
         return "[]";
@@ -295,12 +358,21 @@ std::string TaskManager::getCalendar(int year, int month) const {
             }
         }
 
+        DayGoalIndicator goal = computeDayGoalIndicator(completedCount, static_cast<int>(distinctTaskIds.size()));
+
         oss << "{"
             << "\"day\":" << d << ","
             << "\"date\":\"" << dateStr << "\","
             << "\"due\":" << dueCount << ","
             << "\"completed\":" << completedCount << ","
-            << "\"distinct\":" << distinctTaskIds.size()
+            << "\"distinct\":" << distinctTaskIds.size() << ","
+            << "\"hasTasks\":" << (goal.hasTasks ? "true" : "false") << ","
+            << "\"rate\":" << std::fixed << std::setprecision(1) << goal.rate << ","
+            << "\"rateLabel\":\"" << goal.rateLabel << "\","
+            << "\"tier\":\"" << goal.tier << "\","
+            << "\"bgColor\":\"" << goal.bgColor << "\","
+            << "\"borderColor\":\"" << goal.borderColor << "\","
+            << "\"textColor\":\"" << goal.textColor << "\""
             << "}";
     }
 

@@ -304,10 +304,21 @@ function renderCalendar() {
 
     const todayStr = getLocalTodayStr();
 
-    // Render calendar days
+    // Render calendar days with C++-computed daily goal percentage & color bubbles
     daysData.forEach(dayInfo => {
         const dayCell = document.createElement('div');
         dayCell.className = 'calendar-day';
+
+        if (dayInfo.hasTasks) {
+            dayCell.classList.add('has-goal', `tier-${dayInfo.tier}`);
+            dayCell.style.backgroundColor = dayInfo.bgColor;
+            dayCell.style.borderColor = dayInfo.borderColor;
+            dayCell.style.color = dayInfo.textColor;
+            dayCell.title = `${dayInfo.date}: ${dayInfo.completed}/${dayInfo.distinct} goal met (${dayInfo.rate.toFixed(1)}%) — Due: ${dayInfo.due}, Done: ${dayInfo.completed}`;
+        } else {
+            dayCell.title = `${dayInfo.date}: No tasks`;
+        }
+
         if (dayInfo.date === todayStr) {
             dayCell.classList.add('today');
         }
@@ -315,20 +326,13 @@ function renderCalendar() {
             dayCell.classList.add('selected');
         }
 
-        let dotsHtml = '';
-        if (dayInfo.due > 0 && dayInfo.completed > 0) {
-            dotsHtml = `<div class="day-dots"><span class="dot dot-both" title="Due & Completed"></span></div>`;
-        } else if (dayInfo.due > 0) {
-            dotsHtml = `<div class="day-dots"><span class="dot dot-due" title="Due: ${dayInfo.due}"></span></div>`;
-        } else if (dayInfo.completed > 0) {
-            dotsHtml = `<div class="day-dots"><span class="dot dot-completed" title="Completed: ${dayInfo.completed}"></span></div>`;
-        } else {
-            dotsHtml = `<div class="day-dots"></div>`;
-        }
+        const rateHtml = dayInfo.hasTasks
+            ? `<span class="day-rate">${dayInfo.rateLabel}</span>`
+            : `<span class="day-rate day-rate-empty">—</span>`;
 
         dayCell.innerHTML = `
-            <span>${dayInfo.day}</span>
-            ${dotsHtml}
+            <span class="day-number">${dayInfo.day}</span>
+            ${rateHtml}
         `;
 
         dayCell.addEventListener('click', () => {
