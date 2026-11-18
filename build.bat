@@ -22,7 +22,6 @@ call em++ -O2 -std=c++17 --bind ^
 if %ERRORLEVEL% EQU 0 (
     echo.
     echo [SUCCESS] WebAssembly module built successfully in public/
-    copy /Y public\task_engine.* . >nul
     dir public\task_engine.*
 ) else (
     echo.

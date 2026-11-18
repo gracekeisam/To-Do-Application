@@ -1,0 +1,15 @@
+# Ignore local dev servers, C++ sources, tests, and docs on Vercel static deploy
+server.js
+server.py
+build.bat
+run_server.bat
+src/
+tests/
+Document1.docx
+draft.pdf
+README.md
+app.js
+index.html
+style.css
+task_engine.js
+task_engine.wasm

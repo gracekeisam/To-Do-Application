@@ -6,4 +6,8 @@
 test_*.txt
 .DS_Store
 Thumbs.db
+.vercel
 
+
+.vercel
+.env*
