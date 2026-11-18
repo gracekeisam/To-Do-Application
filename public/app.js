@@ -1,5 +1,5 @@
 /**
- * Cadence — C++ WebAssembly To-Do & Goal Calendar Frontend Glue
+ * To-Do List Application — C++ WebAssembly To-Do & Goal Calendar Frontend Glue
  * Connects the responsive Apple-HIG-aligned UI to the Emscripten Embind C++ TaskManager
  * with queued IDBFS persistence and RAII cleanup on unload.
  */
