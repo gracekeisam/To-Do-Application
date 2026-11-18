@@ -170,9 +170,10 @@ void testAnalyticsAndStreak() {
     // 2026-11-20: 1 due (T3 was completed on 11-16, not 11-20), 0 completed on 11-20 -> 0%, tier "missed", hue 0 red
     // 2026-11-10: 0 tasks -> hasTasks false, tier "none"
     std::string calJson = tm.getCalendar(2026, 11);
-    assert(calJson.find("\"date\":\"2026-11-14\",\"due\":1,\"completed\":1,\"distinct\":1,\"hasTasks\":true,\"rate\":100.0,\"rateLabel\":\"100%\",\"tier\":\"full\",\"bgColor\":\"hsl(145, 65%, 42%)\"") != std::string::npos);
+    assert(calJson.find("\"date\":\"2026-11-14\",\"due\":1,\"completed\":1,\"distinct\":1,\"hasTasks\":true,\"rate\":100.0,\"rateLabel\":\"100%\",\"tier\":\"full\",\"bgColor\":\"hsl(145, 65%, 32%)\"") != std::string::npos);
+    assert(calJson.find("\"darkBgColor\":\"hsl(145, 58%, 31%)\"") != std::string::npos);
     assert(calJson.find("\"date\":\"2026-11-16\",\"due\":2,\"completed\":2,\"distinct\":3,\"hasTasks\":true,\"rate\":66.7,\"rateLabel\":\"67%\",\"tier\":\"medium\"") != std::string::npos);
-    assert(calJson.find("\"date\":\"2026-11-20\",\"due\":1,\"completed\":0,\"distinct\":1,\"hasTasks\":true,\"rate\":0.0,\"rateLabel\":\"0%\",\"tier\":\"missed\",\"bgColor\":\"hsl(0, 85%, 90%)\"") != std::string::npos);
+    assert(calJson.find("\"date\":\"2026-11-20\",\"due\":1,\"completed\":0,\"distinct\":1,\"hasTasks\":true,\"rate\":0.0,\"rateLabel\":\"0%\",\"tier\":\"missed\",\"bgColor\":\"hsl(0, 76%, 92%)\"") != std::string::npos);
     assert(calJson.find("\"date\":\"2026-11-10\",\"due\":0,\"completed\":0,\"distinct\":0,\"hasTasks\":false,\"rate\":0.0,\"rateLabel\":\"\",\"tier\":\"none\"") != std::string::npos);
 
     std::remove(testFile.c_str());

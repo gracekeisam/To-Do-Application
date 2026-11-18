@@ -2,247 +2,297 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C++ WebAssembly To-Do & Habit Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="Cadence — daily task manager with a goal-colored monthly calendar, daily completion rate, and consistency streak running locally in C++ WebAssembly.">
+    <meta name="theme-color" content="#F5F5F7" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0D0E10" media="(prefers-color-scheme: dark)">
+    <title>Cadence — Daily tasks &amp; goal calendar</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230066CC'/%3E%3Cpath d='M9.5 16.5l4.2 4.2 8.8-9.2' fill='none' stroke='%23fff' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="spinner"></div>
-        <p>Loading C++ WebAssembly Engine & Syncing Storage...</p>
+    <!-- Non-blocking startup status bar (Apple HIG: show structure immediately while loading) -->
+    <div id="loadingBanner" class="loading-bar" role="status" aria-live="polite">
+        <span class="loading-dot" aria-hidden="true"></span>
+        <span>Preparing local workspace…</span>
     </div>
 
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="brand">
-                <div class="logo-badge">C++ WASM</div>
-                <div>
-                    <h1>Productivity & Task Engine</h1>
-                    <p class="subtitle">Compiled from native C++ with Emscripten Embind & IDBFS Persistence</p>
+    <!-- Floating translucent navigation bar (Liquid Glass applied only to floating chrome) -->
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="skip-link" href="#main-content">Skip to content</a>
+
+            <div class="brand" aria-label="Cadence">
+                <svg class="brand-mark" width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                    <rect width="28" height="28" rx="7.5" fill="currentColor" class="brand-mark-bg"/>
+                    <path d="M8.5 14.4L12.1 18L19.5 10.2" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="brand-name">Cadence</span>
+            </div>
+
+            <div class="topbar-metrics" aria-label="Productivity summary">
+                <div class="metric-pill" id="streakMetric" title="Consecutive days with at least one completed task (counts from yesterday if nothing is completed yet today)">
+                    <svg class="metric-icon metric-icon-streak" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 2.7c.9 3.2-1.8 4.9-1.8 7.5 0 1.4 1 2.5 2.4 2.5 1.8 0 2.9-1.5 2.6-3.7 2.4 1.8 3.8 4.4 3.8 7.1a7 7 0 1 1-14 0c0-3.8 2.7-6.9 7-13.4Z"/>
+                    </svg>
+                    <span class="metric-value" id="streakDisplay">0</span>
+                    <span class="metric-label" id="streakUnit">day streak</span>
+                </div>
+
+                <div class="metric-divider" aria-hidden="true"></div>
+
+                <div class="metric-pill" id="rateMetric" title="Completed tasks divided by distinct tasks due or completed on the selected day">
+                    <svg class="rate-ring" width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+                        <circle class="rate-ring-track" cx="10" cy="10" r="7.5" fill="none" stroke-width="2.2"/>
+                        <circle class="rate-ring-fill" id="headerRateRing" cx="10" cy="10" r="7.5" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="47.12" stroke-dashoffset="47.12" transform="rotate(-90 10 10)"/>
+                    </svg>
+                    <span class="metric-value" id="dailyRateDisplay">No tasks</span>
+                    <span class="metric-label" id="rateDateLabel">today</span>
                 </div>
             </div>
-            
-            <div class="stats-overview">
-                <!-- Streak Card -->
-                <div class="stat-card streak-card" id="streakCard">
-                    <div class="stat-icon">🔥</div>
-                    <div class="stat-details">
-                        <span class="stat-value" id="streakDisplay">0</span>
-                        <span class="stat-label">Day Streak</span>
-                    </div>
+        </div>
+    </header>
+
+    <!-- Main two-pane workspace -->
+    <main id="main-content" class="workspace">
+        <!-- Left Column: Task Composer & Grouped List -->
+        <section class="tasks-pane" aria-labelledby="tasksHeading">
+            <div class="pane-header">
+                <div class="pane-title-group">
+                    <h1 id="tasksHeading">Tasks</h1>
+                    <span class="pane-subtitle" id="tasksSummarySubtitle">0 pending</span>
                 </div>
 
-                <!-- Daily Rate Card -->
-                <div class="stat-card rate-card" id="dailyRateCard">
-                    <div class="stat-icon">📊</div>
-                    <div class="stat-details">
-                        <span class="stat-value" id="dailyRateDisplay">No tasks</span>
-                        <span class="stat-label" id="rateDateLabel">Daily Completion</span>
-                    </div>
+                <div class="segmented-control" role="tablist" aria-label="Filter tasks">
+                    <button type="button" class="segment-btn active" role="tab" aria-selected="true" data-filter="all">
+                        All <span class="segment-count" id="countAll">0</span>
+                    </button>
+                    <button type="button" class="segment-btn" role="tab" aria-selected="false" data-filter="pending">
+                        Pending <span class="segment-count" id="countPending">0</span>
+                    </button>
+                    <button type="button" class="segment-btn" role="tab" aria-selected="false" data-filter="completed">
+                        Done <span class="segment-count" id="countCompleted">0</span>
+                    </button>
                 </div>
             </div>
-        </header>
 
-        <!-- Notification Banner -->
-        <div id="notificationBanner" class="notification-banner hidden"></div>
-
-        <!-- Main Layout -->
-        <main class="main-content">
-            <!-- Left Column: Task Creator & List -->
-            <section class="task-section">
-                <!-- Add Task Form -->
-                <div class="card form-card">
-                    <div class="card-header">
-                        <h2>Add New Task</h2>
-                        <span class="badge cpp-badge">std::vector&lt;Task&gt;</span>
+            <!-- Unified Task Surface: Quick Composer + Grouped Rows -->
+            <div class="surface tasks-surface">
+                <form id="addTaskForm" class="composer" novalidate>
+                    <div class="composer-input-wrap">
+                        <label for="taskDesc" class="sr-only">Task description</label>
+                        <input
+                            type="text"
+                            id="taskDesc"
+                            class="composer-input"
+                            placeholder="Add a task…"
+                            autocomplete="off"
+                            aria-describedby="taskFormError"
+                        >
                     </div>
-                    
-                    <form id="addTaskForm" class="task-form">
-                        <div class="form-group">
-                            <label for="taskDesc">Task Description <span class="required">*</span></label>
-                            <input type="text" id="taskDesc" placeholder="e.g. Implement leap-year validation algorithms" required autocomplete="off">
-                            <small class="helper-text">Pipes (|) sanitized to /, line breaks converted to spaces.</small>
-                        </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="taskPriority">Priority</label>
-                                <select id="taskPriority">
-                                    <option value="0">Low Priority</option>
-                                    <option value="1" selected>Medium Priority</option>
-                                    <option value="2">High Priority</option>
-                                </select>
-                            </div>
+                    <div class="composer-controls">
+                        <div class="composer-meta-controls">
+                            <!-- Segmented Priority Selector -->
+                            <fieldset class="priority-fieldset">
+                                <legend class="sr-only">Priority</legend>
+                                <div class="priority-segmented" role="radiogroup" aria-label="Task priority">
+                                    <label class="prio-option">
+                                        <input type="radio" name="taskPriority" value="0">
+                                        <span>Low</span>
+                                    </label>
+                                    <label class="prio-option">
+                                        <input type="radio" name="taskPriority" value="1" checked>
+                                        <span>Medium</span>
+                                    </label>
+                                    <label class="prio-option">
+                                        <input type="radio" name="taskPriority" value="2">
+                                        <span>High</span>
+                                    </label>
+                                </div>
+                            </fieldset>
 
-                            <div class="form-group">
-                                <label for="taskDueDate">Due Date (Optional)</label>
-                                <input type="date" id="taskDueDate">
-                                <small class="helper-text">YYYY-MM-DD (Leap-year aware)</small>
+                            <!-- Optional Due Date -->
+                            <div class="date-field-wrap">
+                                <label for="taskDueDate" class="date-field-label">Due</label>
+                                <input type="date" id="taskDueDate" class="date-input" aria-label="Due date (optional)">
                             </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary" id="btnAddTask">
-                            <span class="btn-icon">➕</span> Add Task
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            <span>Add task</span>
                         </button>
-                    </form>
-                </div>
-
-                <!-- Tasks List -->
-                <div class="card list-card">
-                    <div class="card-header task-list-header">
-                        <div class="title-with-count">
-                            <h2>Tasks</h2>
-                            <span class="count-pill" id="totalTasksCount">0</span>
-                        </div>
-                        
-                        <!-- Filter Tabs -->
-                        <div class="filter-tabs">
-                            <button class="filter-btn active" data-filter="all">All</button>
-                            <button class="filter-btn" data-filter="pending">Pending</button>
-                            <button class="filter-btn" data-filter="completed">Completed</button>
-                        </div>
                     </div>
 
-                    <div id="taskList" class="task-list">
-                        <!-- Rendered by JavaScript via getTasksJson() -->
-                    </div>
-
-                    <div id="emptyListState" class="empty-state hidden">
-                        <div class="empty-icon">📝</div>
-                        <p class="empty-title">No tasks found</p>
-                        <p class="empty-desc">Create your first task above to track your productivity habits.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Right Column: Interactive Calendar & Day Analytics -->
-            <aside class="calendar-section">
-                <!-- Interactive Calendar Card -->
-                <div class="card calendar-card">
-                    <div class="calendar-header">
-                        <button class="btn btn-icon-round" id="prevMonthBtn" title="Previous Month">‹</button>
-                        <h3 id="currentMonthYear">November 2026</h3>
-                        <button class="btn btn-icon-round" id="nextMonthBtn" title="Next Month">›</button>
-                    </div>
-
-                    <div class="calendar-actions">
-                        <button class="btn btn-sm btn-outline" id="todayMonthBtn">Go to Today</button>
-                    </div>
-
-                    <!-- Weekday Headers -->
-                    <div class="weekdays-grid">
-                        <span>Sun</span>
-                        <span>Mon</span>
-                        <span>Tue</span>
-                        <span>Wed</span>
-                        <span>Thu</span>
-                        <span>Fri</span>
-                        <span>Sat</span>
-                    </div>
-
-                    <!-- Calendar Days Grid (Calculated by C++ getCalendar) -->
-                    <div id="calendarDaysGrid" class="days-grid"></div>
-
-                    <!-- Calendar Legend -->
-                    <div class="calendar-legend">
-                        <span class="legend-item"><span class="legend-swatch swatch-missed"></span> 0%</span>
-                        <span class="legend-item"><span class="legend-swatch swatch-low"></span> Low</span>
-                        <span class="legend-item"><span class="legend-swatch swatch-medium"></span> Mid</span>
-                        <span class="legend-item"><span class="legend-swatch swatch-high"></span> High</span>
-                        <span class="legend-item"><span class="legend-swatch swatch-full"></span> 100%</span>
-                    </div>
-                </div>
-
-                <!-- Selected Date Analytics Details -->
-                <div class="card day-analytics-card">
-                    <div class="card-header">
-                        <h3>Selected Day Analytics</h3>
-                        <span class="date-badge" id="selectedDateBadge">2026-11-16</span>
-                    </div>
-
-                    <div class="day-stats-grid">
-                        <div class="day-stat-box">
-                            <span class="stat-number" id="dayDueCount">0</span>
-                            <span class="stat-sublabel">Due</span>
-                        </div>
-                        <div class="day-stat-box">
-                            <span class="stat-number" id="dayCompletedCount">0</span>
-                            <span class="stat-sublabel">Completed</span>
-                        </div>
-                        <div class="day-stat-box">
-                            <span class="stat-number" id="dayDistinctCount">0</span>
-                            <span class="stat-sublabel">Distinct Tasks</span>
-                        </div>
-                    </div>
-
-                    <div class="completion-bar-container">
-                        <div class="completion-bar-header">
-                            <span>Completion Rate</span>
-                            <span id="dayRateText" class="rate-percentage">No tasks</span>
-                        </div>
-                        <div class="progress-track">
-                            <div id="dayProgressBar" class="progress-fill" style="width: 0%;"></div>
-                        </div>
-                    </div>
-
-                    <div class="day-tasks-container">
-                        <h4 class="subhead">Tasks for this day</h4>
-                        <ul id="dayTasksList" class="day-tasks-list">
-                            <!-- Tasks on this day rendered here -->
-                        </ul>
-                    </div>
-                </div>
-            </aside>
-        </main>
-
-        <!-- Edit Task Modal -->
-        <div id="editTaskModal" class="modal-backdrop hidden">
-            <div class="modal-box">
-                <div class="modal-header">
-                    <h3>Edit Task</h3>
-                    <button class="btn-close" id="btnCancelEdit">×</button>
-                </div>
-                <form id="editTaskForm">
-                    <input type="hidden" id="editTaskId">
-                    <div class="form-group">
-                        <label for="editTaskDesc">Description</label>
-                        <input type="text" id="editTaskDesc" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="editTaskPriority">Priority</label>
-                            <select id="editTaskPriority">
-                                <option value="0">Low Priority</option>
-                                <option value="1">Medium Priority</option>
-                                <option value="2">High Priority</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="editTaskDueDate">Due Date</label>
-                            <input type="date" id="editTaskDueDate">
-                        </div>
-                    </div>
-                    <div class="modal-actions">
-                        <button type="button" class="btn btn-outline" id="btnCancelEdit2">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
+                    <p id="taskFormError" class="field-error hidden" role="alert"></p>
                 </form>
-            </div>
-        </div>
 
-        <!-- Footer -->
-        <footer class="app-footer">
-            <p>Built with Standard C++ (Task, TaskManager, Priority, isValidDate) compiled to WebAssembly (Emscripten / Embind) & IndexedDB (IDBFS).</p>
-        </footer>
+                <!-- Grouped Task Rows -->
+                <div id="taskList" class="task-list" role="list" aria-label="Task list"></div>
+
+                <!-- Actionable Empty State -->
+                <div id="emptyListState" class="empty-state hidden">
+                    <svg class="empty-glyph" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="4" width="18" height="17" rx="3"/>
+                        <path d="M8 2v4M16 2v4M3 10h18M9 15l2 2 4-4"/>
+                    </svg>
+                    <p class="empty-title" id="emptyStateTitle">No tasks yet</p>
+                    <p class="empty-desc" id="emptyStateDesc">Add a task above with an optional due date to track your daily completion rate.</p>
+                    <button type="button" class="btn btn-secondary btn-compact hidden" id="btnEmptyResetFilter">Show all tasks</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Column: Signature Monthly Goal Calendar + Day Breakdown -->
+        <aside class="calendar-pane" aria-labelledby="currentMonthYear">
+            <div class="surface calendar-surface">
+                <!-- Month Header & Navigation -->
+                <div class="calendar-header">
+                    <div>
+                        <h2 id="currentMonthYear" class="calendar-month-title">November 2026</h2>
+                        <p class="calendar-subtitle">Daily goal completion</p>
+                    </div>
+
+                    <div class="calendar-nav">
+                        <button type="button" class="btn btn-secondary btn-compact" id="todayMonthBtn">Today</button>
+                        <button type="button" class="icon-btn" id="prevMonthBtn" aria-label="Previous month" title="Previous month">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+                        <button type="button" class="icon-btn" id="nextMonthBtn" aria-label="Next month" title="Next month">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Weekday Row -->
+                <div class="weekdays-grid" aria-hidden="true">
+                    <span>Sun</span>
+                    <span>Mon</span>
+                    <span>Tue</span>
+                    <span>Wed</span>
+                    <span>Thu</span>
+                    <span>Fri</span>
+                    <span>Sat</span>
+                </div>
+
+                <!-- Signature Date Bubble Grid (Populated by C++ getCalendar) -->
+                <div id="calendarDaysGrid" class="days-grid" role="grid" aria-label="Monthly goal completion calendar"></div>
+
+                <!-- Accessible Color Scale Legend -->
+                <div class="calendar-legend" aria-label="Daily goal completion color scale">
+                    <span class="legend-item"><span class="legend-swatch swatch-missed" aria-hidden="true"></span> 0%</span>
+                    <span class="legend-item"><span class="legend-swatch swatch-low" aria-hidden="true"></span> Low</span>
+                    <span class="legend-item"><span class="legend-swatch swatch-medium" aria-hidden="true"></span> Mid</span>
+                    <span class="legend-item"><span class="legend-swatch swatch-high" aria-hidden="true"></span> High</span>
+                    <span class="legend-item"><span class="legend-swatch swatch-full" aria-hidden="true"></span> 100%</span>
+                </div>
+
+                <!-- Selected Day Inspector (Integrated inside the same surface) -->
+                <div class="day-inspector" aria-labelledby="selectedDateHeading">
+                    <div class="day-inspector-header">
+                        <div>
+                            <h3 id="selectedDateHeading" class="day-inspector-title">Selected day</h3>
+                            <p class="day-inspector-meta" id="dayMetaSummary">0 completed · 0 due · 0 distinct</p>
+                        </div>
+                        <span id="dayRateText" class="day-inspector-rate">No tasks</span>
+                    </div>
+
+                    <div
+                        class="progress-track"
+                        id="dayProgressTrack"
+                        role="progressbar"
+                        aria-label="Daily completion rate"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        aria-valuenow="0"
+                    >
+                        <div id="dayProgressBar" class="progress-fill" style="width: 0%;"></div>
+                    </div>
+
+                    <ul id="dayTasksList" class="day-tasks-list" aria-label="Tasks on selected day"></ul>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Accessible Edit Sheet (Modal Dialog) -->
+    <div id="editTaskModal" class="sheet-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="editSheetTitle">
+        <div class="sheet-panel">
+            <div class="sheet-header">
+                <h2 id="editSheetTitle">Edit task</h2>
+                <button type="button" class="icon-btn" id="btnCancelEdit" aria-label="Close edit dialog">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="editTaskForm" class="sheet-form" novalidate>
+                <input type="hidden" id="editTaskId">
+
+                <div class="field-group">
+                    <label for="editTaskDesc" class="field-label">Description</label>
+                    <input type="text" id="editTaskDesc" class="text-input" required autocomplete="off" aria-describedby="editFormError">
+                </div>
+
+                <div class="field-row">
+                    <div class="field-group">
+                        <span class="field-label" id="editPriorityLabel">Priority</span>
+                        <div class="priority-segmented priority-segmented-full" role="radiogroup" aria-labelledby="editPriorityLabel">
+                            <label class="prio-option">
+                                <input type="radio" name="editTaskPriority" value="0">
+                                <span>Low</span>
+                            </label>
+                            <label class="prio-option">
+                                <input type="radio" name="editTaskPriority" value="1">
+                                <span>Medium</span>
+                            </label>
+                            <label class="prio-option">
+                                <input type="radio" name="editTaskPriority" value="2">
+                                <span>High</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="editTaskDueDate" class="field-label">Due date (optional)</label>
+                        <input type="date" id="editTaskDueDate" class="text-input">
+                    </div>
+                </div>
+
+                <p id="editFormError" class="field-error hidden" role="alert"></p>
+
+                <div class="sheet-actions">
+                    <button type="button" class="btn btn-secondary" id="btnCancelEdit2">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- WebAssembly Module Loader & Glue -->
+    <!-- Dismissible Status Feedback Toast -->
+    <div id="statusToast" class="status-toast hidden" role="status" aria-live="polite">
+        <span id="statusToastMessage"></span>
+        <button type="button" class="toast-dismiss" id="btnDismissToast" aria-label="Dismiss notification">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+                <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+
+    <footer class="app-footer">
+        <p>Cadence runs locally in C++ WebAssembly and persists your tasks in browser storage.</p>
+    </footer>
+
+    <!-- WebAssembly Engine & Glue -->
     <script src="task_engine.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
-
