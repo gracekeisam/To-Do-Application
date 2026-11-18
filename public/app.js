@@ -230,6 +230,25 @@ function refreshUI() {
 
     // 5. Selected Day Inspector
     renderSelectedDayDetails(tasks, daysData);
+
+    // 6. Keep the sliding pastel navigator pill aligned with active tab width/position
+    requestAnimationFrame(syncFilterIndicator);
+}
+
+/**
+ * Aligns the smooth sliding pastel pill inside the All / Pending / Done navigator
+ */
+function syncFilterIndicator() {
+    const nav = document.getElementById('filterNav');
+    const indicator = document.getElementById('segmentIndicator');
+    if (!nav || !indicator) return;
+
+    const activeBtn = nav.querySelector('.segment-btn.active');
+    if (!activeBtn) return;
+
+    nav.dataset.active = currentFilter;
+    indicator.style.width = `${activeBtn.offsetWidth}px`;
+    indicator.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
 }
 
 /**
@@ -766,7 +785,7 @@ function setupEventListeners() {
         }
     });
 
-    // Filter Segmented Control
+    // Filter Segmented Control (with sliding pastel indicator)
     document.querySelectorAll('.segment-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.segment-btn').forEach(b => {
@@ -777,9 +796,12 @@ function setupEventListeners() {
             btn.setAttribute('aria-selected', 'true');
             currentFilter = btn.dataset.filter;
             pendingDeleteId = null;
+            syncFilterIndicator();
             refreshUI();
         });
     });
+
+    window.addEventListener('resize', syncFilterIndicator);
 
     // Empty state filter reset button
     document.getElementById('btnEmptyResetFilter').addEventListener('click', () => {

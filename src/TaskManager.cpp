@@ -285,13 +285,13 @@ TaskManager::DayGoalIndicator TaskManager::computeDayGoalIndicator(int completed
     info.rateLabel = std::to_string(roundedPct) + "%";
 
     if (completed >= distinct) {
-        // 100% daily goal met -> emerald green bubble (WCAG AA contrast >= 4.6:1 in light & dark)
+        // 100% daily goal met -> botanical pastel-emerald bubble (WCAG AA contrast >= 4.6:1)
         info.tier = "full";
-        info.bgColor = "hsl(145, 65%, 32%)";
-        info.borderColor = "hsl(145, 70%, 26%)";
+        info.bgColor = "hsl(148, 47%, 37%)";
+        info.borderColor = "hsl(148, 52%, 29%)";
         info.textColor = "#ffffff";
-        info.darkBgColor = "hsl(145, 58%, 31%)";
-        info.darkBorderColor = "hsl(145, 64%, 44%)";
+        info.darkBgColor = "hsl(148, 47%, 37%)";
+        info.darkBorderColor = "hsl(148, 52%, 29%)";
         info.darkTextColor = "#ffffff";
     } else {
         if (rawRate == 0.0) {
@@ -304,31 +304,27 @@ TaskManager::DayGoalIndicator TaskManager::computeDayGoalIndicator(int completed
             info.tier = "high";
         }
 
-        // Piecewise smooth HSL gradient computed in C++:
-        // 0% -> 50%: Hue 0 (red) -> 40 (warm amber)
-        // 50% -> 99%: Hue 40 (warm amber) -> 132 (fresh green)
-        int hue = 0;
+        // Piecewise smooth pastel watercolor HSL gradient computed in C++:
+        // 0% -> 50%: Hue 6 (pastel coral-blush) -> 38 (pastel butter-apricot)
+        // 50% -> 99%: Hue 38 (pastel butter-apricot) -> 140 (pastel mint-sage)
+        int hue = 6;
         if (rawRate <= 50.0) {
-            hue = static_cast<int>(std::round((rawRate / 50.0) * 40.0));
+            hue = static_cast<int>(std::round(6.0 + (rawRate / 50.0) * 32.0));
         } else {
-            hue = static_cast<int>(std::round(40.0 + ((rawRate - 50.0) / 50.0) * 92.0));
+            hue = static_cast<int>(std::round(38.0 + ((rawRate - 50.0) / 50.0) * 102.0));
         }
 
-        std::ostringstream bg, border, text, dbg, dborder, dtext;
-        bg << "hsl(" << hue << ", 76%, 92%)";
-        border << "hsl(" << hue << ", 68%, 54%)";
-        text << "hsl(" << hue << ", 74%, 22%)";
-
-        dbg << "hsl(" << hue << ", 42%, 19%)";
-        dborder << "hsl(" << hue << ", 60%, 46%)";
-        dtext << "hsl(" << hue << ", 90%, 84%)";
+        std::ostringstream bg, border, text;
+        bg << "hsl(" << hue << ", 68%, 90%)";
+        border << "hsl(" << hue << ", 54%, 64%)";
+        text << "hsl(" << hue << ", 58%, 24%)";
 
         info.bgColor = bg.str();
         info.borderColor = border.str();
         info.textColor = text.str();
-        info.darkBgColor = dbg.str();
-        info.darkBorderColor = dborder.str();
-        info.darkTextColor = dtext.str();
+        info.darkBgColor = bg.str();
+        info.darkBorderColor = border.str();
+        info.darkTextColor = text.str();
     }
 
     return info;

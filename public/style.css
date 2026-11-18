@@ -1,43 +1,59 @@
 /* ==========================================================================
-   To-Do List Application — Unified Design Token System
-   Grounded in Apple HIG (Accessibility, Color, Typography, Dark Mode, Motion)
-   and tasteskill (90-95% neutral chrome, zero violet, strict spacing & scale).
+   To-Do List Application — Botanical Pastel Stationery Design System
+   Grounded in Apple HIG (Accessibility, Color, Typography, Craft, Motion)
+   and tasteskill (zero violet/lavender, WCAG AA/AAA contrast, strict scale).
    ========================================================================== */
 
 :root {
-    color-scheme: light dark;
+    color-scheme: light;
 
-    /* Surfaces (Light appearance) */
-    --surface-canvas: #F5F5F7;
-    --surface-primary: #FFFFFF;
-    --surface-secondary: #EFEFF2;
-    --surface-hover: #F2F3F6;
-    --surface-glass: rgba(245, 245, 247, 0.78);
-    --surface-glass-opaque: #F5F5F7;
+    /* Pastel Stationery Surfaces (Buttercream, Milk-White, Soft Sage-Mint) */
+    --surface-canvas: #F7F4EC;
+    --surface-primary: #FFFEFA;
+    --surface-secondary: #EDF2EC;
+    --surface-hover: #F3F6F1;
+    --surface-glass: rgba(247, 244, 236, 0.78);
+    --surface-glass-opaque: #F7F4EC;
 
-    /* Ink & Hairlines (WCAG AA/AAA verified on #FFFFFF & #F5F5F7) */
-    --ink-primary: #1D1D1F;       /* 16.8:1 on #FFF */
-    --ink-secondary: #515154;     /*  7.9:1 on #FFF */
-    --ink-tertiary: #66666B;      /*  5.6:1 on #FFF */
-    --hairline: rgba(29, 29, 31, 0.09);
-    --hairline-strong: rgba(29, 29, 31, 0.16);
+    /* Ink & Hairlines (WCAG AA/AAA verified on #FFFEFA & #F7F4EC) */
+    --ink-primary: #1E2D28;       /* 13.9:1 on #FFFEFA */
+    --ink-secondary: #435850;     /*  7.4:1 on #FFFEFA */
+    --ink-tertiary: #5B7068;      /*  5.1:1 on #FFFEFA */
+    --hairline: rgba(30, 45, 40, 0.10);
+    --hairline-strong: rgba(30, 45, 40, 0.18);
 
-    /* Single Primary Action Accent (Cobalt Blue — zero violet/lavender) */
-    --accent: #0066CC;            /* 5.6:1 with #FFF */
-    --accent-hover: #0055B3;
-    --accent-active: #004799;
-    --accent-soft: rgba(0, 102, 204, 0.10);
-    --accent-ink: #0066CC;
+    /* Primary Accent — Coastal Pastel-Harmonious Teal (zero violet) */
+    --accent: #2A6F7D;            /* 5.7:1 with #FFF */
+    --accent-hover: #215B67;
+    --accent-active: #194852;
+    --accent-soft: #D9EEF2;       /* Pastel powder-sky tint */
+    --accent-ink: #1E5763;        /* 7.7:1 on #FFFEFA */
 
-    /* Semantic Signals */
-    --signal-success: #15803D;    /* 5.1:1 on #FFF */
-    --signal-success-soft: rgba(21, 128, 61, 0.12);
-    --signal-warning: #B45309;    /* 5.0:1 on #FFF */
-    --signal-warning-soft: rgba(180, 83, 9, 0.12);
-    --signal-danger: #C81E1E;     /* 5.9:1 on #FFF */
-    --signal-danger-hover: #A91717;
-    --signal-danger-soft: rgba(200, 30, 30, 0.11);
-    --signal-streak: #C2410C;     /* 5.1:1 on #FFF */
+    /* Harmonized Pastel Navigator Tab Tints (zero violet) */
+    --nav-all-bg: rgba(206, 234, 242, 0.80);
+    --nav-all-bd: rgba(42, 111, 125, 0.28);
+    --nav-all-ink: #174B57;       /* 7.8:1 */
+
+    --nav-pending-bg: rgba(253, 232, 202, 0.84);
+    --nav-pending-bd: rgba(186, 124, 52, 0.30);
+    --nav-pending-ink: #6B3F10;   /* 7.6:1 */
+
+    --nav-done-bg: rgba(210, 240, 221, 0.84);
+    --nav-done-bd: rgba(52, 136, 86, 0.28);
+    --nav-done-ink: #175230;      /* 7.6:1 */
+
+    /* Semantic Signals (Pastel paired with deep legible ink) */
+    --signal-success: #2C7A4B;    /* 5.2:1 on #FFFEFA */
+    --signal-success-soft: #DCF2E4;
+    --signal-warning: #9A5B13;    /* 5.2:1 on #FFFEFA */
+    --signal-warning-soft: #FEF1D2;
+    --signal-danger: #B83A34;     /* 5.5:1 on #FFFEFA */
+    --signal-danger-hover: #9C2F2A;
+    --signal-danger-soft: #FDE2DF;
+    --signal-streak: #C25331;     /* 4.8:1 on #FFFEFA */
+
+    /* Bespoke Seamless Light Productivity Doodle SVG Tile (260x260) */
+    --doodle-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260' fill='none'%3E%3Cg stroke-width='1.45' stroke-linecap='round' stroke-linejoin='round'%3E%3C!-- Sketch checkbox with tick --%3E%3Cg stroke='%232A6F7D' opacity='0.20'%3E%3Crect x='22' y='24' width='18' height='18' rx='4.5' transform='rotate(-6 31 33)'/%3E%3Cpath d='M26 33l3.6 3.8 8.2-9.5'/%3E%3C/g%3E%3C!-- Four-point pastel sparkle --%3E%3Cg stroke='%23C48B3B' opacity='0.24'%3E%3Cpath d='M104 24c0 5.5-2.5 8-8 8 5.5 0 8 2.5 8 8 0-5.5 2.5-8 8-8-5.5 0-8-2.5-8-8Z'/%3E%3Ccircle cx='120' cy='22' r='1.5' fill='%23C48B3B'/%3E%3C/g%3E%3C!-- Mini calendar page --%3E%3Cg stroke='%233B8760' opacity='0.19'%3E%3Crect x='176' y='26' width='22' height='20' rx='4' transform='rotate(5 187 36)'/%3E%3Cpath d='M182 22v5M193 23v5M176 33h22'/%3E%3Ccircle cx='183' cy='39' r='1.1' fill='%233B8760'/%3E%3Ccircle cx='189' cy='39' r='1.1' fill='%233B8760'/%3E%3C/g%3E%3C!-- Pencil sketch --%3E%3Cg stroke='%23C9735B' opacity='0.20'%3E%3Cpath d='M56 102l15-15 5 5-15 15-6.5 1.5L56 102Z'/%3E%3Cpath d='M68 90l5 5'/%3E%3C/g%3E%3C!-- Looping ribbon squiggle --%3E%3Cg stroke='%232A6F7D' opacity='0.17'%3E%3Cpath d='M132 96c8-9 18-6 14 3-3 7-11 4-8-3 4-9 16-10 24-2'/%3E%3C/g%3E%3C!-- Botanical leaf sprig --%3E%3Cg stroke='%233B8760' opacity='0.20'%3E%3Cpath d='M222 108c4-11 11-18 20-21'/%3E%3Cpath d='M228 97c-5-2-7-6-5-10 5 1 8 4 5 10Z'/%3E%3Cpath d='M234 91c4 3 6 7 3 11-5-2-6-6-3-11Z'/%3E%3C/g%3E%3C!-- Mini alarm clock --%3E%3Cg stroke='%23C48B3B' opacity='0.21'%3E%3Ccircle cx='34' cy='176' r='10'/%3E%3Cpath d='M34 171v5.5l3.5 2M26 167l-2.5-2.5M42 167l2.5-2.5'/%3E%3C/g%3E%3C!-- Paper airplane --%3E%3Cg stroke='%232A6F7D' opacity='0.19'%3E%3Cpath d='M116 172l24-9-9 22-5-8-10-5Z'/%3E%3Cpath d='M126 177l14-14'/%3E%3C/g%3E%3C!-- Little sun & rays --%3E%3Cg stroke='%23C9735B' opacity='0.21'%3E%3Ccircle cx='206' cy='180' r='6.5'/%3E%3Cpath d='M206 168v-2.5M206 194.5V192M194 180h-2.5M220.5 180H218M197.5 171.5l-1.8-1.8M216.3 190.3l-1.8-1.8M214.5 171.5l1.8-1.8M195.7 190.3l1.8-1.8'/%3E%3C/g%3E%3C!-- Floating wavy line & accent dots --%3E%3Cg stroke='%233B8760' opacity='0.18'%3E%3Cpath d='M68 232c6-4 12 4 18 0s12 4 18 0'/%3E%3C/g%3E%3Cg stroke='%23C9735B' opacity='0.20'%3E%3Ccircle cx='162' cy='234' r='4.5'/%3E%3Cpath d='M174 228l3 3-3 3'/%3E%3C/g%3E%3Cg stroke='%23C48B3B' opacity='0.22'%3E%3Cpath d='M234 230c0 4-1.8 5.8-5.8 5.8 4 0 5.8 1.8 5.8 5.8 0-4 1.8-5.8 5.8-5.8-4 0-5.8-1.8-5.8-5.8Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 
     /* Typography */
     --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", system-ui, sans-serif;
@@ -51,102 +67,45 @@
     --s-6: 32px;
     --s-7: 48px;
 
-    /* Radius Scale (soft family) */
-    --r-sm: 8px;
-    --r-md: 12px;
-    --r-lg: 18px;
+    /* Radius Scale (soft tactile stationery) */
+    --r-sm: 10px;
+    --r-md: 14px;
+    --r-lg: 20px;
     --r-pill: 999px;
 
-    /* Elevation */
-    --shadow-surface: 0 1px 2px rgba(29, 29, 31, 0.04), 0 4px 16px rgba(29, 29, 31, 0.03);
-    --shadow-sheet: 0 20px 50px rgba(29, 29, 31, 0.18), 0 2px 8px rgba(29, 29, 31, 0.08);
-    --shadow-toast: 0 8px 24px rgba(29, 29, 31, 0.14);
+    /* Soft Pastel Shadows */
+    --shadow-surface: 0 1px 2px rgba(30, 45, 40, 0.04), 0 8px 24px rgba(42, 111, 125, 0.06);
+    --shadow-sheet: 0 24px 56px rgba(30, 45, 40, 0.16), 0 2px 10px rgba(30, 45, 40, 0.06);
+    --shadow-toast: 0 10px 28px rgba(30, 45, 40, 0.16);
 
-    /* Legend Swatch Tokens (Light) */
-    --swatch-missed-bg: hsl(0, 76%, 92%);
-    --swatch-missed-bd: hsl(0, 68%, 54%);
-    --swatch-low-bg: hsl(20, 76%, 92%);
-    --swatch-low-bd: hsl(20, 68%, 54%);
-    --swatch-medium-bg: hsl(40, 76%, 92%);
-    --swatch-medium-bd: hsl(40, 68%, 54%);
-    --swatch-high-bg: hsl(105, 76%, 92%);
-    --swatch-high-bd: hsl(105, 68%, 54%);
-    --swatch-full-bg: hsl(145, 65%, 32%);
-    --swatch-full-bd: hsl(145, 70%, 26%);
+    /* Pastel Legend Swatch Tokens (Exact match to C++ pastel HSL engine) */
+    --swatch-missed-bg: hsl(6, 68%, 90%);
+    --swatch-missed-bd: hsl(6, 54%, 64%);
+    --swatch-low-bg: hsl(22, 68%, 90%);
+    --swatch-low-bd: hsl(22, 54%, 64%);
+    --swatch-medium-bg: hsl(38, 68%, 90%);
+    --swatch-medium-bd: hsl(38, 54%, 64%);
+    --swatch-high-bg: hsl(105, 68%, 90%);
+    --swatch-high-bd: hsl(105, 54%, 64%);
+    --swatch-full-bg: hsl(148, 47%, 37%);
+    --swatch-full-bd: hsl(148, 52%, 29%);
 
     /* Motion */
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-    --dur-fast: 140ms;
-    --dur-med: 220ms;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        /* Apple Dark Mode: distinct base vs elevated surfaces, softened whites */
-        --surface-canvas: #0D0E10;
-        --surface-primary: #18191D;
-        --surface-secondary: #24262C;
-        --surface-hover: #212329;
-        --surface-glass: rgba(13, 14, 16, 0.78);
-        --surface-glass-opaque: #0D0E10;
-
-        --ink-primary: #F2F2F5;      /* 15.8:1 on #18191D */
-        --ink-secondary: #B4B6BE;    /*  8.5:1 on #18191D */
-        --ink-tertiary: #8E919C;     /*  5.4:1 on #18191D */
-        --hairline: rgba(255, 255, 255, 0.09);
-        --hairline-strong: rgba(255, 255, 255, 0.18);
-
-        --accent: #0A66D6;           /* 5.58:1 with #FFF */
-        --accent-hover: #1474E8;
-        --accent-active: #0856B8;
-        --accent-soft: rgba(77, 163, 255, 0.15);
-        --accent-ink: #5AA9FF;       /* 7.6:1 on #18191D */
-
-        --signal-success: #4ADE80;
-        --signal-success-soft: rgba(74, 222, 128, 0.14);
-        --signal-warning: #FBBF24;
-        --signal-warning-soft: rgba(251, 191, 36, 0.14);
-        --signal-danger: #F87171;
-        --signal-danger-hover: #EF4444;
-        --signal-danger-soft: rgba(248, 113, 113, 0.14);
-        --signal-streak: #FB923C;
-
-        --shadow-surface: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 8px 24px rgba(0, 0, 0, 0.28);
-        --shadow-sheet: 0 24px 60px rgba(0, 0, 0, 0.55);
-        --shadow-toast: 0 12px 32px rgba(0, 0, 0, 0.45);
-
-        /* Legend Swatch Tokens (Dark) */
-        --swatch-missed-bg: hsl(0, 42%, 19%);
-        --swatch-missed-bd: hsl(0, 60%, 46%);
-        --swatch-low-bg: hsl(20, 42%, 19%);
-        --swatch-low-bd: hsl(20, 60%, 46%);
-        --swatch-medium-bg: hsl(40, 42%, 19%);
-        --swatch-medium-bd: hsl(40, 60%, 46%);
-        --swatch-high-bg: hsl(105, 42%, 19%);
-        --swatch-high-bd: hsl(105, 60%, 46%);
-        --swatch-full-bg: hsl(145, 58%, 31%);
-        --swatch-full-bd: hsl(145, 64%, 44%);
-    }
+    --dur-fast: 150ms;
+    --dur-med: 250ms;
 }
 
 @media (prefers-contrast: more) {
     :root {
-        --hairline: rgba(29, 29, 31, 0.28);
-        --hairline-strong: rgba(29, 29, 31, 0.48);
-        --ink-tertiary: #3A3A3D;
-    }
-}
-
-@media (prefers-color-scheme: dark) and (prefers-contrast: more) {
-    :root {
-        --hairline: rgba(255, 255, 255, 0.28);
-        --hairline-strong: rgba(255, 255, 255, 0.48);
-        --ink-tertiary: #C8CAD2;
+        --hairline: rgba(30, 45, 40, 0.28);
+        --hairline-strong: rgba(30, 45, 40, 0.46);
+        --ink-tertiary: #354740;
     }
 }
 
 /* ==========================================================================
-   Base Reset & Accessibility Primitives
+   Base Reset, Pastel Watercolor Washes & Light Doodles Background
    ========================================================================== */
 
 *, *::before, *::after {
@@ -164,6 +123,13 @@ body {
     line-height: 1.5;
     color: var(--ink-primary);
     background-color: var(--surface-canvas);
+    background-image:
+        var(--doodle-tile),
+        radial-gradient(640px 500px at 10% 8%, rgba(192, 226, 238, 0.42), transparent 72%),
+        radial-gradient(620px 520px at 90% 14%, rgba(200, 234, 214, 0.40), transparent 72%),
+        radial-gradient(680px 540px at 52% 94%, rgba(250, 216, 202, 0.36), transparent 72%);
+    background-attachment: fixed;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
@@ -187,7 +153,7 @@ body {
     display: none !important;
 }
 
-/* Visible Keyboard Focus Ring Everywhere */
+/* Visible Keyboard Focus Ring */
 :focus-visible {
     outline: 2px solid var(--accent-ink);
     outline-offset: 2px;
@@ -254,7 +220,7 @@ body {
 }
 
 /* ==========================================================================
-   Floating Translucent Top Bar
+   Floating Translucent Pastel Top Bar
    ========================================================================== */
 
 .topbar {
@@ -262,8 +228,8 @@ body {
     top: 0;
     z-index: 50;
     background: var(--surface-glass);
-    backdrop-filter: saturate(180%) blur(18px);
-    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    backdrop-filter: saturate(150%) blur(16px);
+    -webkit-backdrop-filter: saturate(150%) blur(16px);
     border-bottom: 1px solid var(--hairline);
 }
 
@@ -308,7 +274,7 @@ body {
 .topbar-metrics {
     display: flex;
     align-items: center;
-    gap: var(--s-4);
+    gap: var(--s-3);
 }
 
 .metric-pill {
@@ -317,6 +283,10 @@ body {
     gap: 7px;
     font-size: 14px;
     color: var(--ink-secondary);
+    background: rgba(255, 254, 250, 0.72);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-pill);
+    padding: 6px 13px;
 }
 
 .metric-icon-streak {
@@ -336,13 +306,11 @@ body {
 }
 
 .metric-divider {
-    width: 1px;
-    height: 18px;
-    background: var(--hairline-strong);
+    display: none;
 }
 
 .rate-ring-track {
-    stroke: var(--hairline-strong);
+    stroke: rgba(30, 45, 40, 0.14);
 }
 
 .rate-ring-fill {
@@ -366,21 +334,21 @@ body {
     flex: 1;
 }
 
-/* Shared Surface (One card recipe page-wide) */
+/* Shared Surface (Warm milk-white pastel card) */
 .surface {
-    background: var(--surface-primary);
+    background: rgba(255, 254, 250, 0.92);
     border: 1px solid var(--hairline);
     border-radius: var(--r-lg);
     box-shadow: var(--shadow-surface);
 }
 
 /* ==========================================================================
-   Left Pane: Tasks Header, Segmented Filter, Composer & Grouped List
+   Left Pane: Header & Seamless Doodle-Integrated All / Pending / Done Navigator
    ========================================================================== */
 
 .pane-header {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: var(--s-3);
@@ -407,51 +375,116 @@ body {
     font-variant-numeric: tabular-nums;
 }
 
-/* macOS / iOS-inspired Segmented Control */
+/* Seamless Background-Blending Navigator with Matching Light Doodles & Sliding Pill */
 .segmented-control {
+    position: relative;
     display: inline-flex;
     align-items: center;
-    background: var(--surface-secondary);
-    padding: 3px;
-    border-radius: var(--r-md);
+    padding: 4px;
+    border-radius: var(--r-pill);
     gap: 2px;
+    /* Blends cleanly into the canvas while continuing the exact same light doodle pattern */
+    background-color: rgba(247, 244, 236, 0.42);
+    background-image:
+        var(--doodle-tile),
+        linear-gradient(135deg, rgba(217, 238, 242, 0.34), rgba(253, 235, 211, 0.28), rgba(218, 241, 226, 0.34));
+    background-attachment: fixed, local;
+    background-repeat: repeat, no-repeat;
+    border: 1px solid rgba(42, 111, 125, 0.14);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.65),
+        0 1px 6px rgba(42, 111, 125, 0.06);
+    overflow: hidden;
+    transition: border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
+}
+
+/* Sliding Active Pill — Glides Smoothly & Carries Matching Faint Doodle Sheen */
+.segment-indicator {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    height: calc(100% - 8px);
+    border-radius: var(--r-pill);
+    background-color: var(--nav-all-bg);
+    background-image: var(--doodle-tile);
+    background-attachment: fixed;
+    border: 1px solid var(--nav-all-bd);
+    box-shadow: 0 2px 8px rgba(30, 45, 40, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+    z-index: 0;
+    will-change: transform, width;
+    transition:
+        transform var(--dur-med) var(--ease-out),
+        width var(--dur-med) var(--ease-out),
+        background-color var(--dur-med) var(--ease-out),
+        border-color var(--dur-med) var(--ease-out);
+}
+
+.segmented-control[data-active="all"] .segment-indicator {
+    background-color: var(--nav-all-bg);
+    border-color: var(--nav-all-bd);
+}
+
+.segmented-control[data-active="pending"] .segment-indicator {
+    background-color: var(--nav-pending-bg);
+    border-color: var(--nav-pending-bd);
+}
+
+.segmented-control[data-active="completed"] .segment-indicator {
+    background-color: var(--nav-done-bg);
+    border-color: var(--nav-done-bd);
 }
 
 .segment-btn {
+    position: relative;
+    z-index: 1;
     appearance: none;
     border: none;
     background: transparent;
     color: var(--ink-secondary);
     font-family: inherit;
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 550;
-    padding: 0 12px;
+    padding: 0 14px;
     min-height: 36px;
-    border-radius: calc(var(--r-md) - 3px);
+    border-radius: var(--r-pill);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+    transition: color var(--dur-fast) var(--ease-out);
 }
 
 .segment-btn:hover {
     color: var(--ink-primary);
 }
 
-.segment-btn.active {
-    background: var(--surface-primary);
-    color: var(--ink-primary);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+.segmented-control[data-active="all"] .segment-btn.active {
+    color: var(--nav-all-ink);
+    font-weight: 650;
+}
+
+.segmented-control[data-active="pending"] .segment-btn.active {
+    color: var(--nav-pending-ink);
+    font-weight: 650;
+}
+
+.segmented-control[data-active="completed"] .segment-btn.active {
+    color: var(--nav-done-ink);
+    font-weight: 650;
 }
 
 .segment-count {
     font-size: 12px;
-    color: var(--ink-tertiary);
+    color: inherit;
+    opacity: 0.72;
     font-variant-numeric: tabular-nums;
 }
 
-/* Quick-Capture Task Composer */
+/* ==========================================================================
+   Quick-Capture Task Composer
+   ========================================================================== */
+
 .tasks-surface {
     overflow: hidden;
 }
@@ -462,19 +495,20 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--s-3);
+    background: linear-gradient(180deg, rgba(237, 244, 239, 0.36) 0%, rgba(255, 254, 250, 0) 100%);
 }
 
 .composer-input {
     width: 100%;
     border: 1px solid var(--hairline-strong);
-    background: var(--surface-canvas);
+    background: var(--surface-primary);
     color: var(--ink-primary);
     font-family: inherit;
     font-size: 16px;
     padding: 12px 14px;
     min-height: 46px;
     border-radius: var(--r-md);
-    transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+    transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .composer-input::placeholder {
@@ -483,9 +517,8 @@ body {
 
 .composer-input:focus {
     outline: none;
-    background: var(--surface-primary);
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
+    box-shadow: 0 0 0 3.5px var(--accent-soft);
 }
 
 .composer-controls {
@@ -515,6 +548,7 @@ body {
     padding: 3px;
     border-radius: var(--r-sm);
     gap: 2px;
+    border: 1px solid var(--hairline);
 }
 
 .priority-segmented-full {
@@ -542,17 +576,30 @@ body {
     justify-content: center;
     min-height: 38px;
     padding: 0 12px;
-    border-radius: calc(var(--r-sm) - 2px);
+    border-radius: calc(var(--r-sm) - 3px);
     font-size: 13px;
     font-weight: 550;
     color: var(--ink-secondary);
     transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
 }
 
-.prio-option input:checked + span {
-    background: var(--surface-primary);
-    color: var(--ink-primary);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+/* Pastel tinted active states per priority level */
+.prio-option input[value="0"]:checked + span {
+    background: var(--signal-success-soft);
+    color: #1A5C35;
+    box-shadow: 0 1px 2px rgba(30, 45, 40, 0.08);
+}
+
+.prio-option input[value="1"]:checked + span {
+    background: var(--signal-warning-soft);
+    color: #7A470E;
+    box-shadow: 0 1px 2px rgba(30, 45, 40, 0.08);
+}
+
+.prio-option input[value="2"]:checked + span {
+    background: var(--signal-danger-soft);
+    color: #932721;
+    box-shadow: 0 1px 2px rgba(30, 45, 40, 0.08);
 }
 
 .prio-option input:focus-visible + span {
@@ -565,6 +612,7 @@ body {
     align-items: center;
     gap: var(--s-2);
     background: var(--surface-secondary);
+    border: 1px solid var(--hairline);
     padding: 0 10px 0 12px;
     border-radius: var(--r-sm);
     min-height: 44px;
@@ -600,7 +648,7 @@ body {
 .field-error {
     margin: 0;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 550;
     color: var(--signal-danger);
     display: flex;
     align-items: center;
@@ -608,7 +656,7 @@ body {
 }
 
 /* ==========================================================================
-   Unified Button System (One primary, one secondary, one destructive)
+   Unified Button System
    ========================================================================== */
 
 .btn {
@@ -653,7 +701,7 @@ body {
 }
 
 .btn-secondary:hover {
-    background: var(--surface-hover);
+    background: #E2EBE2;
     border-color: var(--hairline-strong);
 }
 
@@ -742,7 +790,6 @@ body {
     min-width: 0;
 }
 
-/* 44x44 accessible tap region around crisp 22px circular check control */
 .check-target {
     appearance: none;
     border: none;
@@ -763,7 +810,7 @@ body {
     height: 22px;
     border-radius: 50%;
     border: 1.75px solid var(--hairline-strong);
-    background: transparent;
+    background: var(--surface-primary);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -772,7 +819,8 @@ body {
 }
 
 .check-target:hover .check-circle {
-    border-color: var(--accent-ink);
+    border-color: var(--accent);
+    background: var(--accent-soft);
 }
 
 .check-target:active .check-circle {
@@ -787,7 +835,7 @@ body {
 .task-body {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
     min-width: 0;
 }
 
@@ -809,37 +857,43 @@ body {
     font-variant-numeric: tabular-nums;
 }
 
-/* Priority conveyed with indicator dot + explicit text label (never color alone) */
+/* Pastel Priority Pill + Dot (Never Color Alone) */
 .priority-tag {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-weight: 550;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
 }
 
 .priority-dot {
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     flex-shrink: 0;
 }
 
 .priority-low {
-    color: var(--ink-secondary);
+    background: var(--signal-success-soft);
+    color: #1A5C35;
 }
 .priority-low .priority-dot {
     background: var(--signal-success);
 }
 
 .priority-med {
-    color: var(--signal-warning);
+    background: var(--signal-warning-soft);
+    color: #7A470E;
 }
 .priority-med .priority-dot {
-    background: var(--signal-warning);
+    background: #C48322;
 }
 
 .priority-high {
-    color: var(--signal-danger);
+    background: var(--signal-danger-soft);
+    color: #932721;
 }
 .priority-high .priority-dot {
     background: var(--signal-danger);
@@ -862,7 +916,6 @@ body {
     flex-shrink: 0;
 }
 
-/* Inline Delete Confirmation (Replaces browser confirm() dialog) */
 .confirm-delete-group {
     display: inline-flex;
     align-items: center;
@@ -880,7 +933,8 @@ body {
 }
 
 .empty-glyph {
-    color: var(--ink-tertiary);
+    color: var(--accent);
+    opacity: 0.7;
     margin-bottom: var(--s-1);
 }
 
@@ -903,7 +957,7 @@ body {
 }
 
 /* ==========================================================================
-   Right Pane: Signature Monthly Goal Calendar + Day Inspector
+   Right Pane: Signature Pastel Monthly Goal Calendar + Day Inspector
    ========================================================================== */
 
 .calendar-surface {
@@ -955,7 +1009,7 @@ body {
     gap: 6px;
 }
 
-/* Date Bubbles — Powered by C++ Light/Dark Goal Variables */
+/* Pastel Date Bubbles — Powered Directly by C++ Goal Tokens */
 .calendar-day {
     appearance: none;
     font-family: inherit;
@@ -964,7 +1018,7 @@ body {
     padding: 4px 2px;
     border-radius: var(--r-md);
     border: 1.5px solid transparent;
-    background: var(--surface-canvas);
+    background: #F4F2EA;
     color: var(--ink-primary);
     display: flex;
     flex-direction: column;
@@ -978,7 +1032,7 @@ body {
 
 .calendar-day:hover:not(.empty) {
     transform: translateY(-1px);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 3px 10px rgba(30, 45, 40, 0.08);
 }
 
 .calendar-day:active:not(.empty) {
@@ -992,23 +1046,14 @@ body {
     pointer-events: none;
 }
 
-/* C++ Goal Bubble Colors (Light Mode default) */
 .calendar-day.has-goal {
     background-color: var(--goal-bg);
     border-color: var(--goal-border);
     color: var(--goal-text);
 }
 
-@media (prefers-color-scheme: dark) {
-    .calendar-day.has-goal {
-        background-color: var(--goal-bg-dark);
-        border-color: var(--goal-border-dark);
-        color: var(--goal-text-dark);
-    }
-}
-
 .calendar-day.today:not(.has-goal) {
-    border-color: var(--accent-ink);
+    border-color: rgba(42, 111, 125, 0.42);
     background: var(--accent-soft);
     color: var(--accent-ink);
 }
@@ -1025,16 +1070,16 @@ body {
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: var(--accent-ink);
+    background: var(--accent);
 }
 
-.calendar-day.today.selected::after,
+.calendar-day.today.selected:not(.has-goal)::after,
 .calendar-day.today.tier-full::after {
     background: #FFFFFF;
 }
 
 .calendar-day.selected {
-    box-shadow: 0 0 0 2.5px var(--accent-ink);
+    box-shadow: 0 0 0 2.5px var(--accent);
     z-index: 1;
 }
 
@@ -1042,10 +1087,6 @@ body {
     background: var(--accent);
     border-color: var(--accent);
     color: #FFFFFF;
-}
-
-.calendar-day.selected:not(.has-goal) .day-rate-empty {
-    color: rgba(255, 255, 255, 0.72);
 }
 
 .day-number {
@@ -1063,12 +1104,7 @@ body {
     letter-spacing: -0.02em;
 }
 
-.day-rate-empty {
-    opacity: 0.32;
-    font-weight: 400;
-}
-
-/* Calendar Scale Legend */
+/* Calendar Pastel Scale Legend */
 .calendar-legend {
     display: flex;
     align-items: center;
@@ -1143,7 +1179,7 @@ body {
 
 .progress-track {
     width: 100%;
-    height: 6px;
+    height: 7px;
     background: var(--surface-secondary);
     border-radius: var(--r-pill);
     overflow: hidden;
@@ -1224,7 +1260,7 @@ body {
     position: fixed;
     inset: 0;
     z-index: 200;
-    background: rgba(13, 14, 16, 0.48);
+    background: rgba(30, 45, 40, 0.34);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     display: flex;
@@ -1407,7 +1443,11 @@ body {
     }
 
     .topbar-metrics {
-        gap: var(--s-3);
+        gap: var(--s-2);
+    }
+
+    .metric-pill {
+        padding: 5px 10px;
     }
 
     .metric-label {
@@ -1477,8 +1517,8 @@ body {
     }
 
     .segment-btn {
-        padding: 0 9px;
-        font-size: 12px;
+        padding: 0 10px;
+        font-size: 12.5px;
     }
 }
 

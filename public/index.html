@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="To-Do List Application — daily task manager with a goal-colored monthly calendar, daily completion rate, and consistency streak running locally in C++ WebAssembly.">
-    <meta name="theme-color" content="#F5F5F7" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0D0E10" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#F7F4EC">
     <title>To-Do List Application</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230066CC'/%3E%3Cpath d='M9.5 16.5l4.2 4.2 8.8-9.2' fill='none' stroke='%23fff' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232A6F7D'/%3E%3Cpath d='M9.5 16.5l4.2 4.2 8.8-9.2' fill='none' stroke='%23fff' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -63,7 +62,8 @@
                     <span class="pane-subtitle" id="tasksSummarySubtitle">0 pending</span>
                 </div>
 
-                <div class="segmented-control" role="tablist" aria-label="Filter tasks">
+                <div class="segmented-control" id="filterNav" data-active="all" role="tablist" aria-label="Filter tasks">
+                    <span class="segment-indicator" id="segmentIndicator" aria-hidden="true"></span>
                     <button type="button" class="segment-btn active" role="tab" aria-selected="true" data-filter="all">
                         All <span class="segment-count" id="countAll">0</span>
                     </button>
